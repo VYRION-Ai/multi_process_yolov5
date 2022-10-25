@@ -8,5 +8,5 @@ How to use:
 2- run main.py
 
 *  you want to change the image size , source, weights as you need 
-- it works well with video, but with live camera it will need high power gpu 
+- it works well with video, but with live camera it will need high power gpu (because it will make detection for all captured frames , no frame will be losed) 
 - it faster that normle hub and normal detect.py
