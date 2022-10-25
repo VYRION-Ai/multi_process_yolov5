@@ -18,7 +18,6 @@ def do_detection(Frames_queue, Results_queue):
 
 def show_results(Results_queue, x):
     while True:
-        x = x + 1
         if Results_queue.qsize() > 0:
             results = Results_queue.get()
             im_list = results.render()
@@ -40,7 +39,6 @@ if __name__ == '__main__':
     timor = time.time()
     while cap.isOpened():
         ret, frame1 = cap.read()
-        ret, frame2 = cap.read()
         if not ret:
             break
         Frames_queue.put(frame1)
