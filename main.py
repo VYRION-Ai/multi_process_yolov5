@@ -4,11 +4,8 @@ import cv2
 import numpy as np
 from multiprocessing import Process, Queue, Pipe
 
-model = torch.hub.load('yolov5', 'custom', path='yolov5n.pt', source='local',
-                       device='cpu')  # local repo
 
-
-def do_detection(Frames_queue, Results_queue):
+def do_detection(Frames_queue, Results_queue, model):
     while True:
         if Frames_queue.qsize() > 0:
             frame = Frames_queue.get()
@@ -16,7 +13,7 @@ def do_detection(Frames_queue, Results_queue):
             Results_queue.put(results)
 
 
-def show_results(Results_queue, x):
+def show_results(Results_queue, model):
     while True:
         if Results_queue.qsize() > 0:
             results = Results_queue.get()
@@ -29,11 +26,14 @@ def show_results(Results_queue, x):
 
 
 if __name__ == '__main__':
+
+    model = torch.hub.load('yolov5', 'custom', path='best.pt', source='local',
+                           device='cpu')  # local repo
     cap = cv2.VideoCapture(0)
     Frames_queue = Queue()
     Results_queue = Queue()
-    p1 = Process(target=do_detection, args=(Frames_queue, Results_queue))
-    p2 = Process(target=show_results, args=(Results_queue, 1))
+    p1 = Process(target=do_detection, args=(Frames_queue, Results_queue, model))
+    p2 = Process(target=show_results, args=(Results_queue, model))
     p1.start()
     p2.start()
     timor = time.time()
